@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+{% block title %}Bank Detail{% endblock %}
+{% block content %}
+<h2>{{ bank.name }}</h2>
+<p>{{ bank.city }}, {{ bank.country }}</p>
+<p>Email: {{ bank.email }} | Phone: {{ bank.phone }}</p>
+<a class="btn" href="/customers/?bank={{ bank.id }}">View Customers</a>
+{% endblock %}
