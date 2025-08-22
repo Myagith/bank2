@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}Banks{% endblock %}
+{% block content %}
+<h2>Banks</h2>
+<form method="get" class="filters">{{ filter.form.as_p }}<button class="btn" type="submit">Filter</button></form>
+<a class="btn" href="/banks/create/">New Bank</a>
+<table class="table">
+  <thead><tr><th>Name</th><th>City</th><th>Country</th><th>Actions</th></tr></thead>
+  <tbody>
+    {% for b in banks %}
+      <tr>
+        <td><a href="/banks/{{ b.pk }}/">{{ b.name }}</a></td>
+        <td>{{ b.city }}</td>
+        <td>{{ b.country }}</td>
+        <td><a href="/banks/{{ b.pk }}/update/">Edit</a> | <a href="/banks/{{ b.pk }}/delete/">Delete</a></td>
+      </tr>
+    {% empty %}
+      <tr><td colspan="4">No data</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
