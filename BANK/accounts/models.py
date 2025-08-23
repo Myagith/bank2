@@ -10,6 +10,7 @@ class Account(models.Model):
     class Status(models.TextChoices):
         OPEN = 'OPEN', 'Open'
         CLOSED = 'CLOSED', 'Closed'
+        CLOSING = 'CLOSING', 'Closing'
 
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='accounts')
     number = models.CharField(max_length=24, unique=True)

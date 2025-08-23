@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Client</title>
     <link rel="stylesheet" href="{% static 'comptes/css/style.css' %}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body class="gradient-bg">
     <div class="topbar">
@@ -17,9 +18,91 @@
     </div>
     <div class="container">
         <div class="card">
-            <h1>Dashboard Client</h1>
-            <p>Accès limité aux fonctionnalités de consultation.</p>
+            <h1>Informations personnelles</h1>
+            {% if customer %}
+            <ul>
+                <li>Nom: {{ customer.name }}</li>
+                <li>Email: {{ customer.email }}</li>
+                <li>Identifiant client: {{ customer.client_no }}</li>
+            </ul>
+            {% else %}
+            <p>Aucun profil client associé à cet utilisateur.</p>
+            {% endif %}
+        </div>
+
+        <div class="card">
+            <h2>Comptes</h2>
+            <p>Comptes ouverts: {{ totals.accounts_open }} | Solde total: {{ totals.balance_total }}</p>
+            <table class="table">
+                <thead><tr><th>Numéro</th><th>Type</th><th>Statut</th><th>Solde</th></tr></thead>
+                <tbody>
+                    {% for a in accounts %}
+                    <tr>
+                        <td>{{ a.number }}</td>
+                        <td>{{ a.type }}</td>
+                        <td>{{ a.status }}</td>
+                        <td>{{ a.balance }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="4">Aucun compte</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="card">
+            <h2>Cartes</h2>
+            <p>(Aucune carte définie dans le modèle — placeholder)</p>
+            <ul>
+                {% for c in cards %}
+                <li>{{ c.masked_number }} — {{ c.type }} — {{ c.expires }}</li>
+                {% empty %}
+                <li>Aucune carte</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2>Transactions récentes</h2>
+            <table class="table">
+                <thead><tr><th>Date</th><th>Type</th><th>Montant</th><th>Compte</th></tr></thead>
+                <tbody>
+                    {% for t in transactions %}
+                    <tr>
+                        <td>{{ t.created_at }}</td>
+                        <td>{{ t.type }}</td>
+                        <td>{{ t.amount }}</td>
+                        <td>{{ t.account.number }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="4">Aucune transaction</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="card">
+            <h2>Dépôts vs Retraits par mois</h2>
+            <canvas id="monthlyBars"></canvas>
         </div>
     </div>
+
+    <script>
+    const labels = {{ chart_labels|safe }};
+    const deposits = {{ chart_deposits|safe }};
+    const withdraws = {{ chart_withdraws|safe }};
+
+    new Chart(document.getElementById('monthlyBars'), {
+        type: 'bar',
+        data: {
+            labels,
+            datasets: [
+                { label: 'Dépôts', data: deposits, backgroundColor: '#2e7d32' },
+                { label: 'Retraits/Transferts', data: withdraws, backgroundColor: '#ff8c42' }
+            ]
+        },
+        options: { responsive: true, maintainAspectRatio: false }
+    });
+    </script>
 </body>
 </html>
