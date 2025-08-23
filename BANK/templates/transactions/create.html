@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block title %}Nouvelle opération{% endblock %}
+{% block content %}
+<h2>Nouvelle opération</h2>
+<form method="post" class="card">{% csrf_token %}
+  {{ form.as_p }}
+  <button class="btn" type="submit">Valider</button>
+</form>
+{% endblock %}
+

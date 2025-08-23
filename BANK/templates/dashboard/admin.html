@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard Admin{% endblock %}
+{% block content %}
+<h1>Dashboard Admin</h1>
+<div class="cards">
+  <div class="card">Total Banks: {{ total_banks }}</div>
+  <div class="card">Total Customers: {{ total_customers }}</div>
+  <div class="card">Total Accounts: {{ total_accounts }}</div>
+  <div class="card"><a class="btn" href="/banks/create/">➕ Ajouter une banque</a></div>
+</div>
+
+<div class="grid2">
+  <div>
+    <h3>Transactions mensuelles</h3>
+    <canvas id="txChart"></canvas>
+  </div>
+  <div>
+    <h3>Top 15 Banques par clients</h3>
+    <table class="table">
+      <thead><tr><th>#</th><th>Banque</th><th>Pays</th><th>Ville</th><th>Clients</th></tr></thead>
+      <tbody id="top15Body"></tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+fetch('/dashboard/api/transactions/monthly/')
+  .then(r=>r.json()).then(d=>{
+    new Chart(document.getElementById('txChart'), {
+      type:'line', data:{labels:d.labels, datasets:[{label:'Volumes', data:d.values, borderColor:'#ff8800', backgroundColor:'rgba(255,136,0,0.2)'}]}, options:{responsive:true, scales:{y:{beginAtZero:true}}}
+    })
+  })
+
+fetch('/dashboard/api/banks/top15/')
+  .then(r=>r.json()).then(d=>{
+    const body=document.getElementById('top15Body');
+    body.innerHTML = d.items.map((x,i)=>`<tr><td>${i+1}</td><td>${x.name}</td><td>${x.country}</td><td>${x.city}</td><td>${x.num_customers}</td></tr>`).join('');
+  })
+</script>
+{% endblock %}
+

@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block title %}Mon Espace Client{% endblock %}
+{% block content %}
+<h1>Bienvenue</h1>
+<p>Voici un aperçu rapide de vos comptes et opérations récentes.</p>
+<div class="cards">
+  <div class="card">Solde global: <strong>{{ total_balance|default:"0.00" }}</strong></div>
+  <div class="card"><a class="btn" href="/accounts/">Mes comptes</a></div>
+  <div class="card"><a class="btn" href="/transactions/create/">Effectuer un dépôt/virement</a></div>
+</div>
+<div>
+  <h3>Dépenses vs Dépôts (mois)</h3>
+  <canvas id="expensesChart"></canvas>
+</div>
+<script>
+// Demo static chart using the same endpoint
+fetch('/dashboard/api/transactions/monthly/')
+  .then(r=>r.json()).then(d=>{
+    new Chart(document.getElementById('expensesChart'), {
+      type:'bar', data:{labels:d.labels, datasets:[{label:'Montants', data:d.values, backgroundColor:'rgba(0,150,136,0.6)'}]}, options:{responsive:true, scales:{y:{beginAtZero:true}}}
+    })
+  })
+</script>
+{% endblock %}
+

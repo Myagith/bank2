@@ -4,9 +4,12 @@ from django.db.models import Sum, Count
 from transactions.models import Transaction
 from banks.models import Bank
 from customers.models import Customer
+from django.utils.timezone import now
+from datetime import timedelta
 
 
 def transactions_monthly(request):
+    # Ensure there is at least demo data for charts if DB is empty
     qs = (
         Transaction.objects
         .annotate(month=TruncMonth('created_at'))
