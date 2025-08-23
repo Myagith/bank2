@@ -10,4 +10,5 @@ urlpatterns = [
     path('<int:pk>/', views.BankDetailView.as_view(), name='detail'),
     path('<int:pk>/delete/', views.BankDeleteView.as_view(), name='delete'),
     path('top-15/', views.BankTop15View.as_view(), name='top15'),
+    path('<int:pk>/clients/', views.BankClientsView.as_view(), name='clients'),
 ]

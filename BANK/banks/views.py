@@ -6,6 +6,8 @@ from django.db.models import Count
 from .models import Bank
 from .forms import BankForm
 from .filters import BankFilter
+from customers.models import Customer
+from customers.filters import CustomerFilter
 
 
 class BankListView(FilterView):
@@ -49,3 +51,20 @@ class BankTop15View(ListView):
 
     def get_queryset(self):
         return Bank.objects.annotate(num_customers=Count('customers')).order_by('-num_customers')[:15]
+
+
+class BankClientsView(FilterView):
+    model = Customer
+    template_name = 'banks/clients.html'
+    context_object_name = 'customers'
+    filterset_class = CustomerFilter
+    paginate_by = 20
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        return qs.filter(bank_id=self.kwargs['pk'])
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['bank'] = Bank.objects.get(pk=self.kwargs['pk'])
+        return ctx
