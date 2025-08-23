@@ -1,0 +1,3 @@
+Bonjour {{ customer.name }},
+
+Bienvenue chez {{ customer.bank.name }}.

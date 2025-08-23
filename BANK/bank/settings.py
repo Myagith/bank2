@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'dashboard',
     'billing',
     'comptes',
+    'authapp',
 ]
 
 MIDDLEWARE = [
@@ -62,7 +63,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'comptes.middleware.LoginRequiredMiddleware',
+    'authapp.middleware.LoginRequiredMiddleware',
 ]
 
 ROOT_URLCONF = 'bank.urls'
@@ -138,9 +139,9 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # Authentication
 AUTH_USER_MODEL = 'users.User'
-LOGIN_URL = '/comptes/login/'
-LOGIN_REDIRECT_URL = '/comptes/dashboard/'
-LOGOUT_REDIRECT_URL = '/comptes/login/'
+LOGIN_URL = '/auth/login/'
+LOGIN_REDIRECT_URL = '/auth/dashboard/'
+LOGOUT_REDIRECT_URL = '/auth/login/'
 
 # Email (dev: console backend; prod via SMTP env)
 EMAIL_BACKEND = os.getenv('EMAIL_BACKEND', 'django.core.mail.backends.console.EmailBackend')

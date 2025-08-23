@@ -1,0 +1,4 @@
+Bonjour,
+
+Veuillez trouver votre facture #{{ invoice.id }} en pièce jointe.
+Montant: {{ invoice.amount }}
