@@ -1,0 +1,15 @@
+{% load static %}
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><title>Créer une facture</title>
+<link rel="stylesheet" href="{% static 'comptes/css/style.css' %}"></head>
+<body class="gradient-bg">
+<div class="container">
+  <div class="card">
+    <h1>Créer une facture</h1>
+    <form method="post" enctype="multipart/form-data">{% csrf_token %}
+      {{ form.as_p }}
+      <button class="btn btn-primary" type="submit">Enregistrer</button>
+    </form>
+  </div>
+</div>
+</body></html>

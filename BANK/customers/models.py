@@ -8,6 +8,7 @@ class Customer(models.Model):
     email = models.EmailField()
     client_no = models.CharField(max_length=32, unique=True)
     phone = models.CharField(max_length=32)
+    address = models.CharField(max_length=255, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:

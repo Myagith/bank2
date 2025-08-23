@@ -1,0 +1,122 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Admin</title>
+    <link rel="stylesheet" href="{% static 'comptes/css/style.css' %}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="gradient-bg">
+    <div class="topbar">
+        <div>Connecté en tant qu'ADMIN</div>
+        <div>
+            <a class="btn btn-link" href="{% url 'comptes:dashboard_client' %}">Vue client</a>
+            <a class="btn btn-link" href="{% url 'comptes:change_password' %}">Changer mot de passe</a>
+            <a class="btn btn-link" href="{% url 'comptes:logout' %}">Déconnexion</a>
+        </div>
+    </div>
+    <div class="container">
+        <div class="card">
+            <h1>Dashboard Admin</h1>
+            <div class="kpis">
+                <div class="kpi"><div class="kpi-label">Banques</div><div class="kpi-value">{{ banks_count }}</div></div>
+                <div class="kpi"><div class="kpi-label">Clients</div><div class="kpi-value">{{ customers_count }}</div></div>
+                <div class="kpi"><div class="kpi-label">Comptes ouverts</div><div class="kpi-value">{{ accounts_open_count }}</div></div>
+            </div>
+        </div>
+        <div class="card">
+            <h2>Top 15 banques (par # clients)</h2>
+            <table class="table">
+                <thead>
+                    <tr><th>Banque</th><th>Pays</th><th>Ville</th><th># Clients</th></tr>
+                </thead>
+                <tbody>
+                    {% for b in top_banks %}
+                    <tr>
+                        <td>{{ b.name }}</td>
+                        <td>{{ b.country }}</td>
+                        <td>{{ b.city }}</td>
+                        <td>{{ b.num_customers }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="4">Aucune donnée</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="card">
+            <h2>Répartition clients par banque</h2>
+            <canvas id="clientsByBank"></canvas>
+        </div>
+        <div class="card">
+            <h2>Évolution du montant des transactions</h2>
+            <canvas id="txMonthly"></canvas>
+        </div>
+        {% if scoped.clients_total %}
+        <div class="card">
+            <h2>Statistiques de votre banque</h2>
+            <ul>
+                <li>Total clients: {{ scoped.clients_total }}</li>
+                <li>Total comptes: {{ scoped.accounts_total }}</li>
+                <li>Comptes fermés: {{ scoped.accounts_closed }}</li>
+                <li>Comptes en fermeture: {{ scoped.accounts_closing }}</li>
+            </ul>
+            <h3>Répartition des comptes par type</h3>
+            <ul>
+                {% for t in scoped.types %}
+                <li>{{ t.type }}: {{ t.c }}</li>
+                {% empty %}
+                <li>Aucune donnée</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+        <div class="card">
+            <h2>Transactions récentes</h2>
+            <table class="table">
+                <thead><tr><th>Date</th><th>Compte</th><th>Type</th><th>Montant</th></tr></thead>
+                <tbody>
+                    {% for t in recent_txs %}
+                    <tr>
+                        <td>{{ t.created_at }}</td>
+                        <td>{{ t.account.number }}</td>
+                        <td>{{ t.type }}</td>
+                        <td>{{ t.amount }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="4">Aucune transaction</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+    const clientsData = {
+        labels: {{ clients_by_bank|pluck:'name'|default:''|safe }},
+        values: {{ clients_by_bank|pluck:'num_customers'|default:''|safe }}
+    };
+    const txData = {
+        labels: {{ tx_chart.labels|safe }},
+        values: {{ tx_chart.values|safe }}
+    };
+    // Fallback if no custom filter pluck: build arrays from context via script tag
+    const clientsByBankLabels = ({{ clients_by_bank|safe }}).map(x => x.name);
+    const clientsByBankValues = ({{ clients_by_bank|safe }}).map(x => x.num_customers);
+
+    new Chart(document.getElementById('clientsByBank'), {
+        type: 'bar',
+        data: { labels: clientsByBankLabels, datasets: [{ label: 'Clients', data: clientsByBankValues, backgroundColor: '#ff8c42' }] },
+        options: { responsive: true, maintainAspectRatio: false }
+    });
+
+    new Chart(document.getElementById('txMonthly'), {
+        type: 'line',
+        data: { labels: txData.labels, datasets: [{ label: 'Montant', data: txData.values, borderColor: '#2e7d32', backgroundColor: 'rgba(46,125,50,0.2)' }] },
+        options: { responsive: true, maintainAspectRatio: false }
+    });
+    </script>
+</body>
+</html>

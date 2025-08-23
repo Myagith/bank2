@@ -4,9 +4,9 @@ from accounts.models import Account
 
 class Transaction(models.Model):
     class Type(models.TextChoices):
-        TRANSFER = 'TRANSFER', 'Transfer'
-        DEPOSIT = 'DEPOSIT', 'Deposit'
-        WITHDRAW = 'WITHDRAW', 'Withdraw'
+        TRANSFER = 'TRANSFER', 'Virement'
+        DEPOSIT = 'DEPOSIT', 'Dépôt'
+        WITHDRAW = 'WITHDRAW', 'Retrait'
 
     account = models.ForeignKey(Account, on_delete=models.CASCADE, related_name='transactions')
     type = models.CharField(max_length=16, choices=Type.choices)

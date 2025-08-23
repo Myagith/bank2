@@ -1,6 +1,8 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.utils import timezone
+from banks.models import Bank
+from customers.models import Customer
 
 
 class User(AbstractUser):
@@ -18,6 +20,10 @@ class User(AbstractUser):
     # 2FA OTP fields
     otp_code = models.CharField(max_length=6, null=True, blank=True)
     otp_expires_at = models.DateTimeField(null=True, blank=True)
+
+    # Relations for scoping dashboards
+    bank = models.ForeignKey(Bank, null=True, blank=True, on_delete=models.SET_NULL, related_name='users')
+    customer = models.OneToOneField(Customer, null=True, blank=True, on_delete=models.SET_NULL, related_name='user')
 
     def mark_email_verified(self):
         self.email_verified_at = timezone.now()

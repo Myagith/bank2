@@ -9,7 +9,6 @@ https://docs.djangoproject.com/en/5.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
-
 from pathlib import Path
 import os
 from datetime import timedelta
@@ -52,6 +51,8 @@ INSTALLED_APPS = [
     'transactions',
     'dashboard',
     'billing',
+    'comptes',
+    'authapp',
 ]
 
 MIDDLEWARE = [
@@ -62,7 +63,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'core.middleware.RequireAuthenticationMiddleware',
+    'authapp.middleware.LoginRequiredMiddleware',
 ]
 
 ROOT_URLCONF = 'bank.urls'
@@ -138,9 +139,9 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # Authentication
 AUTH_USER_MODEL = 'users.User'
-LOGIN_URL = '/users/login/'
-LOGIN_REDIRECT_URL = '/'
-LOGOUT_REDIRECT_URL = '/users/login/'
+LOGIN_URL = '/auth/login/'
+LOGIN_REDIRECT_URL = '/auth/dashboard/'
+LOGOUT_REDIRECT_URL = '/auth/login/'
 
 # Email (dev: console backend; prod via SMTP env)
 EMAIL_BACKEND = os.getenv('EMAIL_BACKEND', 'django.core.mail.backends.console.EmailBackend')
