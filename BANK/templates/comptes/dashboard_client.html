@@ -1,0 +1,25 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Client</title>
+    <link rel="stylesheet" href="{% static 'comptes/css/style.css' %}">
+</head>
+<body class="gradient-bg">
+    <div class="topbar">
+        <div>Connecté en tant que CLIENT</div>
+        <div>
+            <a class="btn btn-link" href="{% url 'comptes:change_password' %}">Changer mot de passe</a>
+            <a class="btn btn-link" href="{% url 'comptes:logout' %}">Déconnexion</a>
+        </div>
+    </div>
+    <div class="container">
+        <div class="card">
+            <h1>Dashboard Client</h1>
+            <p>Accès limité aux fonctionnalités de consultation.</p>
+        </div>
+    </div>
+</body>
+</html>

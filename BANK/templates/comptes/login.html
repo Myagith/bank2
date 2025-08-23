@@ -1,0 +1,47 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion</title>
+    <link rel="stylesheet" href="{% static 'comptes/css/style.css' %}">
+    <script defer src="{% static 'comptes/js/app.js' %}"></script>
+</head>
+<body class="gradient-bg">
+    <div class="center-container">
+        <div class="card">
+            <h1 class="title">Connexion</h1>
+            {% if messages %}
+                <ul class="messages">
+                    {% for message in messages %}
+                        <li class="{{ message.tags }}">{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+            <form method="post" novalidate>
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="id_username">Nom d'utilisateur</label>
+                    {{ form.username }}
+                    {% if form.username.errors %}
+                        <div class="error">{{ form.username.errors|striptags }}</div>
+                    {% endif %}
+                </div>
+                <div class="form-group password-group">
+                    <label for="id_password">Mot de passe</label>
+                    {{ form.password }}
+                    <button type="button" class="toggle-password" data-target="id_password">Afficher</button>
+                    {% if form.password.errors %}
+                        <div class="error">{{ form.password.errors|striptags }}</div>
+                    {% endif %}
+                </div>
+                {% if form.non_field_errors %}
+                    <div class="error">{{ form.non_field_errors|striptags }}</div>
+                {% endif %}
+                <button class="btn btn-primary" type="submit">Se connecter</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
