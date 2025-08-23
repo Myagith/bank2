@@ -6,6 +6,8 @@
   <div class="card">Total Banks: {{ total_banks }}</div>
   <div class="card">Total Customers: {{ total_customers }}</div>
   <div class="card">Total Accounts: {{ total_accounts }}</div>
+  <div class="card">Open Accounts: {{ open_accounts }}</div>
+  <div class="card">Closed Accounts: {{ closed_accounts }}</div>
   <div class="card"><a class="btn" href="/banks/create/">➕ Ajouter une banque</a></div>
 </div>
 
@@ -16,6 +18,15 @@
   </div>
   <div>
     <h3>Top 15 Banques par clients</h3>
+    <form class="card" id="filters" style="margin-bottom:10px; padding:10px">
+      <label>Année de création après</label>
+      <input type="number" id="year_after" min="1900" max="2100" style="width:120px">
+      <label>Min clients</label>
+      <input type="number" id="min_clients" min="0" style="width:120px">
+      <button class="btn" type="button" onclick="loadTop15()">Filtrer</button>
+      <a class="btn" href="/dashboard/export/top-banks.csv">Exporter CSV</a>
+      <a class="btn" href="/dashboard/export/top-banks.xlsx">Exporter Excel</a>
+    </form>
     <table class="table">
       <thead><tr><th>#</th><th>Banque</th><th>Pays</th><th>Ville</th><th>Clients</th></tr></thead>
       <tbody id="top15Body"></tbody>
@@ -31,11 +42,18 @@ fetch('/dashboard/api/transactions/monthly/')
     })
   })
 
-fetch('/dashboard/api/banks/top15/')
-  .then(r=>r.json()).then(d=>{
-    const body=document.getElementById('top15Body');
-    body.innerHTML = d.items.map((x,i)=>`<tr><td>${i+1}</td><td>${x.name}</td><td>${x.country}</td><td>${x.city}</td><td>${x.num_customers}</td></tr>`).join('');
-  })
+function loadTop15(){
+  const y = document.getElementById('year_after').value;
+  const m = document.getElementById('min_clients').value;
+  const q = new URLSearchParams();
+  if(y) q.append('year_after', y); if(m) q.append('min_clients', m);
+  fetch('/dashboard/api/banks/top15/?'+q.toString())
+    .then(r=>r.json()).then(d=>{
+      const body=document.getElementById('top15Body');
+      body.innerHTML = d.items.map((x,i)=>`<tr><td>${i+1}</td><td>${x.name}</td><td>${x.country}</td><td>${x.city}</td><td>${x.num_customers}</td></tr>`).join('');
+    })
+}
+loadTop15()
 </script>
 {% endblock %}
 

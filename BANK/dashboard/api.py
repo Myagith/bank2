@@ -25,10 +25,12 @@ def transactions_monthly(request):
 
 
 def banks_top15(request):
-    qs = (
-        Bank.objects
-        .annotate(num_customers=Count('customers'))
-        .order_by('-num_customers')[:15]
-        .values('id', 'name', 'country', 'city', 'num_customers')
-    )
+    created_after = request.GET.get('year_after')
+    min_clients = request.GET.get('min_clients')
+    qs = Bank.objects.annotate(num_customers=Count('customers'))
+    if created_after and created_after.isdigit():
+        qs = qs.filter(created_at__year__gt=int(created_after))
+    if min_clients and min_clients.isdigit():
+        qs = qs.filter(num_customers__gte=int(min_clients))
+    qs = qs.order_by('-num_customers')[:15].values('id','name','country','city','num_customers')
     return JsonResponse({'items': list(qs)})

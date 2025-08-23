@@ -8,23 +8,34 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-<header class="navbar">
+<div class="layout">
+  <aside class="sidebar">
     <div class="brand">PAYGUARD</div>
     <nav>
-        <a href="/">Dashboard</a>
-        <a href="/banks/">Banks</a>
-        <a href="/customers/">Customers</a>
-        <a href="/accounts/">Accounts</a>
-        <a href="/transactions/history/">Transactions</a>
-        <a href="/users/logout/" class="btn-logout">Logout</a>
+      <a href="/" class="nav-item">Tableau de bord</a>
+      {% if request.user.is_authenticated and request.user.role == 'ADMIN' %}
+        <span class="nav-section">Administration</span>
+        <a href="/banks/" class="nav-item">Banques</a>
+        <a href="/customers/" class="nav-item">Clients</a>
+        <a href="/accounts/" class="nav-item">Comptes</a>
+        <a href="/transactions/history/" class="nav-item">Transactions</a>
+      {% else %}
+        <span class="nav-section">Mon espace</span>
+        <a href="/accounts/" class="nav-item">Mes comptes</a>
+        <a href="/transactions/history/" class="nav-item">Mes opérations</a>
+      {% endif %}
     </nav>
-</header>
-<main class="container">
+    <div class="sidebar-footer">
+      <a href="/users/logout/" class="btn-logout">Déconnexion</a>
+    </div>
+  </aside>
+  <main class="container">
     {% for message in messages %}
       <div class="flash {{ message.tags }}">{{ message }}</div>
     {% endfor %}
     {% block content %}{% endblock %}
-</main>
+  </main>
+</div>
 <footer class="footer">© BANK</footer>
 <script src="/static/js/forms.js"></script>
 </body>

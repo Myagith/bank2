@@ -19,3 +19,13 @@ body{
 .table th,.table td{padding:10px 12px; border-bottom:1px solid #eee; text-align:left}
 .grid2{display:grid; grid-template-columns:1fr 1fr; gap:16px}
 @media(max-width:800px){.grid2{grid-template-columns:1fr}}
+
+/* Side layout */
+.layout{display:grid; grid-template-columns:260px 1fr; min-height:100vh}
+.sidebar{background:linear-gradient(180deg, rgba(255,136,0,0.12), rgba(0,184,148,0.12)); border-right:1px solid #eee; padding:18px; position:sticky; top:0; height:100vh}
+.sidebar .brand{font-weight:800; margin-bottom:12px}
+.sidebar .nav-section{display:block; margin:16px 0 8px; font-size:12px; text-transform:uppercase; color:#667}
+.sidebar .nav-item{display:block; padding:10px 12px; margin:4px 0; border-radius:10px; color:#223; text-decoration:none}
+.sidebar .nav-item:hover{background:#fff}
+.sidebar .btn-logout{display:inline-block; margin-top:20px; background:var(--orange); color:#fff; padding:8px 12px; border-radius:10px; text-decoration:none}
+.sidebar-footer{position:absolute; bottom:18px}
