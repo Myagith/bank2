@@ -2,13 +2,14 @@ from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView
 from django_filters.views import FilterView
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Transaction
 from .forms import TransactionForm
 from .services import post_transaction
 
 
-class TransactionCreateView(CreateView):
+class TransactionCreateView(LoginRequiredMixin, CreateView):
     model = Transaction
     form_class = TransactionForm
     template_name = 'transactions/create.html'
@@ -24,7 +25,7 @@ class TransactionCreateView(CreateView):
         return response
 
 
-class TransactionHistoryView(FilterView):
+class TransactionHistoryView(LoginRequiredMixin, FilterView):
     model = Transaction
     template_name = 'transactions/history.html'
     context_object_name = 'transactions'

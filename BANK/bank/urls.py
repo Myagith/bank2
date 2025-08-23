@@ -22,5 +22,9 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('users/', include('users.urls')),
     path('', include('dashboard.urls')),
+    path('banks/', include('banks.urls')),
+    path('customers/', include('customers.urls')),
+    path('accounts/', include('accounts.urls')),
+    path('transactions/', include('transactions.urls')),
     path('home/', RedirectView.as_view(pattern_name='dashboard:index', permanent=False)),
 ]

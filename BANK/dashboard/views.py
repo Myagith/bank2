@@ -29,5 +29,7 @@ def dashboard_admin(request):
 
 @login_required
 def dashboard_client(request):
-    # In this demo, clients aren't linked to User; display generic stats.
-    return render(request, 'dashboard/client.html')
+    # Données simples pour la démo
+    return render(request, 'dashboard/client.html', {
+        'total_balance': 0,
+    })
