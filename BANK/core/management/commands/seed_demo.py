@@ -48,11 +48,19 @@ class Command(BaseCommand):
             banks.append(bank)
 
         # Customers, Accounts and Transactions
+        customer_field_names = {f.name for f in Customer._meta.get_fields()}
         for i in range(1, 31):
             bank = random.choice(banks)
+            cust_defaults = {
+                'name': f'Client {i}',
+                'email': f'client{i}@demo.ci',
+                'phone': '+22501020304',
+            }
+            if 'address' in customer_field_names:
+                cust_defaults['address'] = 'Abidjan, CI'
             customer, _ = Customer.objects.get_or_create(
                 client_no=f'C{i:05d}', bank=bank,
-                defaults={'name': f'Client {i}', 'email': f'client{i}@demo.ci', 'phone': '+22501020304'}
+                defaults=cust_defaults
             )
             # Accounts
             for j in range(random.randint(1, 2)):
