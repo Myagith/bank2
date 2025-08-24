@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard Admin{% endblock %}
+{% block content %}
+<h1>Dashboard Admin</h1>
+<div class="cards">
+  <div class="card"><div class="metric-label">Banques</div><div class="metric-value">{{ total_banks }}</div></div>
+  <div class="card"><div class="metric-label">Clients</div><div class="metric-value">{{ total_customers }}</div></div>
+  <div class="card"><div class="metric-label">Comptes</div><div class="metric-value">{{ total_accounts }}</div></div>
+  <div class="card"><div class="metric-label">Ouverts</div><div class="metric-value">{{ open_accounts }}</div></div>
+  <div class="card"><div class="metric-label">Fermés</div><div class="metric-value">{{ closed_accounts }}</div></div>
+  <div class="card">
+    <div class="metric-label">Objectif mensuel</div>
+    <div style="position:relative; width:100%; max-width:200px; margin:auto">
+      <canvas id="gauge"></canvas>
+      <div class="gauge-center" style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); font-weight:800;"></div>
+    </div>
+  </div>
+  <div class="card"><a class="btn" href="/banks/create/">➕ Ajouter une banque</a></div>
+  </div>
+
+<div class="grid2">
+  <div>
+    <h3>Transactions mensuelles</h3>
+    <canvas id="txChart"></canvas>
+  </div>
+  <div>
+    <h3>Top 15 Banques par clients</h3>
+    <form class="card" id="filters" style="margin-bottom:10px; padding:10px">
+      <label>Année de création après</label>
+      <input type="number" id="year_after" min="1900" max="2100" style="width:120px">
+      <label>Min clients</label>
+      <input type="number" id="min_clients" min="0" style="width:120px">
+      <button class="btn" type="button" onclick="loadTop15()">Filtrer</button>
+      <a class="btn" href="/dashboard/export/top-banks.csv">Exporter CSV</a>
+      <a class="btn" href="/dashboard/export/top-banks.xlsx">Exporter Excel</a>
+    </form>
+    <table class="table">
+      <thead><tr><th>#</th><th>Banque</th><th>Pays</th><th>Ville</th><th>Clients</th></tr></thead>
+      <tbody id="top15Body"></tbody>
+    </table>
+  </div>
+  <div>
+    <h3>Dépôts vs Retraits</h3>
+    <canvas id="typeChart"></canvas>
+  </div>
+  <div>
+    <h3>Activité par heure</h3>
+    <canvas id="hourChart"></canvas>
+  </div>
+  <div>
+    <h3>Alertes fraude</h3>
+    <div class="card" id="fraudList">Chargement…</div>
+  </div>
+</div>
+
+<script>
+fetch('/dashboard/api/transactions/monthly/')
+  .then(r=>r.json()).then(d=>{
+    new Chart(document.getElementById('txChart'), {
+      type:'line', data:{labels:d.labels, datasets:[{label:'Volumes', data:d.values, borderColor:'#ff8800', backgroundColor:'rgba(255,136,0,0.2)'}]}, options:{responsive:true, scales:{y:{beginAtZero:true}}}
+    })
+  })
+
+function loadTop15(){
+  const y = document.getElementById('year_after').value;
+  const m = document.getElementById('min_clients').value;
+  const q = new URLSearchParams();
+  if(y) q.append('year_after', y); if(m) q.append('min_clients', m);
+  fetch('/dashboard/api/banks/top15/?'+q.toString())
+    .then(r=>r.json()).then(d=>{
+      const body=document.getElementById('top15Body');
+      body.innerHTML = d.items.map((x,i)=>`<tr><td>${i+1}</td><td>${x.name}</td><td>${x.country}</td><td>${x.city}</td><td>${x.num_customers}</td></tr>`).join('');
+    })
+}
+loadTop15()
+
+// Charts (via module)
+import('/static/js/dashboard.js').then(m=>m.renderAdminCharts && m.renderAdminCharts())
+
+fetch('/dashboard/api/activity-by-hour/')
+ .then(r=>r.json()).then(d=>{
+   new Chart(document.getElementById('hourChart'), {type:'bar', data:{labels:d.labels, datasets:[{label:'Connexions/Opérations', data:d.values, backgroundColor:'rgba(54,162,235,.6)'}]}, options:{responsive:true, scales:{y:{beginAtZero:true}}}})
+ })
+
+fetch('/dashboard/api/fraud-alerts/')
+ .then(r=>r.json()).then(d=>{
+   const el = document.getElementById('fraudList');
+   el.innerHTML = d.items.length ? d.items.map(x=>`<div style='display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid #eee'>
+     <span>${x.date} — ${x.customer} (${x.account})</span>
+     <span style='color:#c62828; font-weight:700'>${x.amount} — ${x.reason}</span>
+   </div>`).join('') : 'Aucune alerte';
+ })
+</script>
+{% endblock %}
+

@@ -13,7 +13,6 @@ class RequireAuthenticationMiddleware(MiddlewareMixin):
     AUTH_WHITELIST_PREFIXES = (
         '/users/login',
         '/users/logout',
-        '/users/register',
         '/users/otp',
         '/admin',
         '/static',

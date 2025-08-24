@@ -1,10 +1,12 @@
 {% extends 'base.html' %}
 {% block title %}Login{% endblock %}
 {% block content %}
-<h2>Login</h2>
-<form method="post">{% csrf_token %}
-  {{ form.as_p }}
-  <button class="btn" type="submit">Login</button>
-</form>
-<p>Need an account? <a href="/users/register/">Register</a></p>
+<div class="auth-card">
+  <h2>Connexion</h2>
+  <form method="post" novalidate>{% csrf_token %}
+    {{ form.as_p }}
+    <button class="btn" type="submit">Se connecter</button>
+  </form>
+  <p class="muted">Accès réservé aux utilisateurs créés par l'administrateur.</p>
+</div>
 {% endblock %}

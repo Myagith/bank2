@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %}Mon Espace Client{% endblock %}
+{% block content %}
+<h1>Mon espace</h1>
+<p>Aperçu de vos comptes et opérations.</p>
+<div class="cards">
+  <div class="card"><div class="metric-label">Solde global</div><div class="metric-value">{{ total_balance|default:"0.00" }}</div></div>
+  <div class="card"><a class="btn" href="/accounts/">Mes comptes</a></div>
+  <div class="card"><a class="btn" href="/transactions/create/">Nouveau dépôt/virement</a></div>
+</div>
+<div class="grid2">
+  <div>
+    <h3>Mes montants mensuels</h3>
+    <canvas id="clientBar"></canvas>
+  </div>
+</div>
+<script>
+import('/static/js/dashboard.js').then(m=>m.renderClientCharts && m.renderClientCharts())
+</script>
+{% endblock %}
+
