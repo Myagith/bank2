@@ -3,13 +3,20 @@
 {% block content %}
 <h1>Dashboard Admin</h1>
 <div class="cards">
-  <div class="card">Total Banks: {{ total_banks }}</div>
-  <div class="card">Total Customers: {{ total_customers }}</div>
-  <div class="card">Total Accounts: {{ total_accounts }}</div>
-  <div class="card">Open Accounts: {{ open_accounts }}</div>
-  <div class="card">Closed Accounts: {{ closed_accounts }}</div>
+  <div class="card"><div class="metric-label">Banques</div><div class="metric-value">{{ total_banks }}</div></div>
+  <div class="card"><div class="metric-label">Clients</div><div class="metric-value">{{ total_customers }}</div></div>
+  <div class="card"><div class="metric-label">Comptes</div><div class="metric-value">{{ total_accounts }}</div></div>
+  <div class="card"><div class="metric-label">Ouverts</div><div class="metric-value">{{ open_accounts }}</div></div>
+  <div class="card"><div class="metric-label">Fermés</div><div class="metric-value">{{ closed_accounts }}</div></div>
+  <div class="card">
+    <div class="metric-label">Objectif mensuel</div>
+    <div style="position:relative; width:100%; max-width:200px; margin:auto">
+      <canvas id="gauge"></canvas>
+      <div class="gauge-center" style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); font-weight:800;"></div>
+    </div>
+  </div>
   <div class="card"><a class="btn" href="/banks/create/">➕ Ajouter une banque</a></div>
-</div>
+  </div>
 
 <div class="grid2">
   <div>
@@ -31,6 +38,10 @@
       <thead><tr><th>#</th><th>Banque</th><th>Pays</th><th>Ville</th><th>Clients</th></tr></thead>
       <tbody id="top15Body"></tbody>
     </table>
+  </div>
+  <div>
+    <h3>Dépôts vs Retraits</h3>
+    <canvas id="typeChart"></canvas>
   </div>
 </div>
 
@@ -54,6 +65,9 @@ function loadTop15(){
     })
 }
 loadTop15()
+
+// Charts (via module)
+import('/static/js/dashboard.js').then(m=>m.renderAdminCharts && m.renderAdminCharts())
 </script>
 {% endblock %}
 

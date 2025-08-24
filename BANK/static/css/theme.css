@@ -10,7 +10,9 @@ body{
 .navbar nav .btn-logout{color:#fff; background:var(--orange); padding:8px 14px; border-radius:8px}
 .container{max-width:1100px; margin:24px auto; padding:0 16px}
 .cards{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:16px}
-.card{background:#fff; border-radius:14px; padding:18px; box-shadow:0 8px 30px rgba(0,0,0,0.06)}
+.card{background:#fff; border-radius:16px; padding:18px; box-shadow:0 12px 30px rgba(0,0,0,0.06)}
+.metric-label{font-size:12px; text-transform:uppercase; color:#667; letter-spacing:.3px}
+.metric-value{font-size:28px; font-weight:800; margin-top:4px}
 .btn{background:var(--orange); color:#fff; border:none; border-radius:10px; padding:10px 16px; cursor:pointer; transition:.2s transform,.2s box-shadow}
 .btn:hover{transform:translateY(-1px); box-shadow:0 8px 18px rgba(255,136,0,.3)}
 .auth-card{max-width:420px; margin:48px auto; padding:24px; border-radius:16px; background:rgba(255,255,255,0.8); box-shadow:0 12px 40px rgba(0,0,0,.08)}
