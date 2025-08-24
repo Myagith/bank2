@@ -1,6 +1,5 @@
 from django.contrib import messages
 from django.conf import settings
-import os
 from django.contrib.auth import login as auth_login, logout as auth_logout
 from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import render, redirect
@@ -47,12 +46,6 @@ def login(request):
             request.session['otp_ok'] = False
             send_otp_email(user)
             messages.info(request, 'Check your email for the 6-digit code.')
-            # Dev/demo: afficher l'OTP si DEBUG ou SHOW_OTP_IN_UI=1
-            try:
-                if getattr(settings, 'DEBUG', False) or os.getenv('SHOW_OTP_IN_UI', '0') == '1':
-                    messages.info(request, f"Code OTP (démo): {user.otp_code}")
-            except Exception:
-                pass
             return redirect('users:otp_verify')
     else:
         form = LoginForm()
