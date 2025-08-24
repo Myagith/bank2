@@ -31,3 +31,7 @@ body{
 .sidebar .nav-item:hover{background:#fff}
 .sidebar .btn-logout{display:inline-block; margin-top:20px; background:var(--orange); color:#fff; padding:8px 12px; border-radius:10px; text-decoration:none}
 .sidebar-footer{position:absolute; bottom:18px}
+
+.badge{display:inline-block; padding:4px 8px; border-radius:999px; background:#f0f0ff; font-size:12px}
+input, select{width:100%; padding:8px 10px; border:1px solid #e2e2e8; border-radius:10px}
+label{display:block; font-size:12px; margin-bottom:4px; color:#667}

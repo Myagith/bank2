@@ -2,26 +2,33 @@
 {% block title %}Comptes{% endblock %}
 {% block content %}
 <h2>Comptes</h2>
-<form method="get" class="filters">
-  <label>Banque</label><input type="text" name="customer__bank" value="{{ request.GET.customer__bank }}">
-  <label>Statut</label><input type="text" name="status" value="{{ request.GET.status }}">
-  <label>Type</label><input type="text" name="type" value="{{ request.GET.type }}">
-  <button class="btn" type="submit">Filtrer</button>
-</form>
-<a class="btn" href="/accounts/create/">Créer un compte</a>
-<table class="table">
-  <thead><tr><th>Numéro</th><th>Client</th><th>Type</th><th>Statut</th><th>Solde</th><th>Actions</th></tr></thead>
-  <tbody>
-    {% for a in accounts %}
-      <tr>
-        <td><a href="/accounts/{{ a.pk }}/">{{ a.number }}</a></td>
-        <td>{{ a.customer }}</td>
-        <td>{{ a.type }}</td>
-        <td>{{ a.status }}</td>
-        <td>{{ a.balance }}</td>
-        <td><a href="/accounts/{{ a.pk }}/update/">Modifier</a></td>
-      </tr>
-    {% empty %}<tr><td colspan="6">Aucune donnée</td></tr>{% endfor %}
-  </tbody>
-</table>
+<div class="card" style="margin-bottom:12px">
+  <form method="get" class="filters" style="display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:8px; align-items:end">
+    <div><label>Banque</label><input type="text" name="customer__bank" value="{{ request.GET.customer__bank }}"></div>
+    <div><label>Statut</label><input type="text" name="status" value="{{ request.GET.status }}"></div>
+    <div><label>Type</label><input type="text" name="type" value="{{ request.GET.type }}"></div>
+    <div><button class="btn" type="submit">Filtrer</button></div>
+  </form>
+</div>
+
+<div class="cards">
+  {% for a in accounts %}
+    <div class="card">
+      <div class="metric-label">Compte</div>
+      <div class="metric-value" style="font-size:20px">{{ a.number }}</div>
+      <div style="margin-top:8px; color:#667">{{ a.customer }}</div>
+      <div style="margin-top:8px">
+        <span class="badge">{{ a.type }}</span>
+        <span class="badge" style="background:#eef">{{ a.status }}</span>
+      </div>
+      <div style="margin-top:12px; font-weight:700">Solde: {{ a.balance }}</div>
+      <div style="margin-top:12px">
+        <a class="btn" href="/accounts/{{ a.pk }}/">Détails</a>
+        <a class="btn" href="/accounts/{{ a.pk }}/update/" style="background:#00b894">Modifier</a>
+      </div>
+    </div>
+  {% empty %}
+    <div class="card">Aucun compte</div>
+  {% endfor %}
+</div>
 {% endblock %}
