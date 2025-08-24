@@ -11,7 +11,12 @@
     <div><label>Montant ≤</label><input type="number" step="0.01" name="amount__lte" value="{{ request.GET.amount__lte }}"></div>
     <div><button class="btn" type="submit">Filtrer</button></div>
   </form>
-  <div style="margin-top:8px"><a class="btn" href="/transactions/create/">Nouvelle opération</a></div>
+  <div style="margin-top:8px; display:flex; gap:8px; flex-wrap:wrap">
+    <a class="btn" href="/transactions/create/">Nouvelle opération</a>
+    <a class="btn" href="/transactions/export/csv/">Exporter CSV</a>
+    <a class="btn" href="/transactions/export/xlsx/">Exporter Excel</a>
+    <a class="btn" href="/transactions/export/pdf/">Exporter PDF</a>
+  </div>
   </div>
 
 <table class="table">
