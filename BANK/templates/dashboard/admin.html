@@ -43,6 +43,14 @@
     <h3>Dépôts vs Retraits</h3>
     <canvas id="typeChart"></canvas>
   </div>
+  <div>
+    <h3>Activité par heure</h3>
+    <canvas id="hourChart"></canvas>
+  </div>
+  <div>
+    <h3>Alertes fraude</h3>
+    <div class="card" id="fraudList">Chargement…</div>
+  </div>
 </div>
 
 <script>
@@ -68,6 +76,20 @@ loadTop15()
 
 // Charts (via module)
 import('/static/js/dashboard.js').then(m=>m.renderAdminCharts && m.renderAdminCharts())
+
+fetch('/dashboard/api/activity-by-hour/')
+ .then(r=>r.json()).then(d=>{
+   new Chart(document.getElementById('hourChart'), {type:'bar', data:{labels:d.labels, datasets:[{label:'Connexions/Opérations', data:d.values, backgroundColor:'rgba(54,162,235,.6)'}]}, options:{responsive:true, scales:{y:{beginAtZero:true}}}})
+ })
+
+fetch('/dashboard/api/fraud-alerts/')
+ .then(r=>r.json()).then(d=>{
+   const el = document.getElementById('fraudList');
+   el.innerHTML = d.items.length ? d.items.map(x=>`<div style='display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid #eee'>
+     <span>${x.date} — ${x.customer} (${x.account})</span>
+     <span style='color:#c62828; font-weight:700'>${x.amount} — ${x.reason}</span>
+   </div>`).join('') : 'Aucune alerte';
+ })
 </script>
 {% endblock %}
 

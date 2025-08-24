@@ -1,6 +1,7 @@
 from django.http import JsonResponse
 from django.db.models.functions import TruncMonth
 from django.db.models import Sum, Count, Q
+from django.db.models.functions import ExtractHour
 from transactions.models import Transaction
 from banks.models import Bank
 from customers.models import Customer
@@ -53,3 +54,38 @@ def transactions_monthly_by_type(request):
         'withdraw': [float(x['wit'] or 0) for x in qs],
     }
     return JsonResponse(data)
+
+
+def activity_by_hour(request):
+    qs = (
+        Transaction.objects
+        .annotate(h=ExtractHour('created_at'))
+        .values('h')
+        .annotate(n=Count('id'))
+    )
+    counts = {x['h']: x['n'] for x in qs if x['h'] is not None}
+    labels = list(range(0,24))
+    values = [int(counts.get(h, 0)) for h in labels]
+    return JsonResponse({'labels': labels, 'values': values})
+
+
+def fraud_alerts(request):
+    # Démo: retraits > 400 considérés suspects
+    suspicious = (
+        Transaction.objects
+        .select_related('account','account__customer')
+        .filter(type='WITHDRAW', amount__gt=400)
+        .order_by('-created_at')[:50]
+    )
+    items = [
+        {
+            'date': t.created_at.strftime('%Y-%m-%d %H:%M'),
+            'type': t.type,
+            'amount': float(t.amount),
+            'account': t.account.number,
+            'customer': str(t.account.customer),
+            'reason': 'Retrait élevé (>400)'
+        }
+        for t in suspicious
+    ]
+    return JsonResponse({'items': items})

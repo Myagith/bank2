@@ -11,6 +11,8 @@ urlpatterns = [
     path('api/transactions/monthly/', api.transactions_monthly, name='transactions_monthly'),
     path('api/transactions/monthly-by-type/', api.transactions_monthly_by_type, name='transactions_monthly_by_type'),
     path('api/banks/top15/', api.banks_top15, name='banks_top15'),
+    path('api/activity-by-hour/', api.activity_by_hour, name='activity_by_hour'),
+    path('api/fraud-alerts/', api.fraud_alerts, name='fraud_alerts'),
     path('export/top-banks.csv', exports.top_banks_csv, name='export_top_banks_csv'),
     path('export/top-banks.xlsx', exports.top_banks_xlsx, name='export_top_banks_xlsx'),
 ]
