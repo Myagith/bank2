@@ -30,11 +30,21 @@ class Command(BaseCommand):
             'Banque Atlantique','Société Générale CI','NSIA Banque','Bank of Africa','Ecobank','UBA','Versus Bank',
             'Bridge Bank','Coris Bank','BICICI','BACIM','FinBank','Orange Bank','Wizall Bank','Afriland Bank'
         ]
+        # Préparer la liste des champs Bank pour gérer les variantes de schéma
+        bank_field_names = {f.name for f in Bank._meta.get_fields()}
         for name in bank_names:
-            bank, _ = Bank.objects.get_or_create(
-                name=name,
-                defaults={'country': 'Côte d\'Ivoire', 'city': 'Abidjan', 'email': f'contact@{name.lower().replace(" ","")}.ci', 'phone': '+22501020304'}
-            )
+            defaults = {
+                'country': "Côte d'Ivoire",
+                'city': 'Abidjan',
+                'email': f"contact@{name.lower().replace(' ', '')}.ci",
+                'phone': '+22501020304',
+            }
+            # Renseigner des valeurs par défaut si ces champs existent et sont NOT NULL
+            for extra in ['owner', 'ceo', 'director', 'director_general', 'general_manager', 'proprietor', 'owner_name']:
+                if extra in bank_field_names:
+                    defaults[extra] = 'Direction Générale'
+
+            bank, _ = Bank.objects.get_or_create(name=name, defaults=defaults)
             banks.append(bank)
 
         # Customers, Accounts and Transactions
