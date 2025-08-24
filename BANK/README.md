@@ -94,16 +94,31 @@ Commande: `python manage.py seed_demo`
 
 ## Emails
 - Par défaut, console: les emails (OTP, bienvenue) s’affichent dans le terminal
-- Pour SMTP (exemple):
+
+### Configuration e‑mail SMTP (Gmail)
+1) Active un “App Password” sur ton compte Google (Sécurité → Mots de passe d’application).
+2) Mets à jour `.env` (déjà pré‑rempli dans `.env.example`):
 ```
 EMAIL_BACKEND=django.core.mail.backends.smtp.EmailBackend
-EMAIL_HOST=smtp.example.com
+EMAIL_HOST=smtp.gmail.com
 EMAIL_PORT=587
-EMAIL_HOST_USER=…
-EMAIL_HOST_PASSWORD=…
+EMAIL_HOST_USER=votre.email@gmail.com
+EMAIL_HOST_PASSWORD=VOTRE_APP_PASSWORD
 EMAIL_USE_TLS=1
-DEFAULT_FROM_EMAIL=noreply@bank.local
+EMAIL_USE_SSL=0
+DEFAULT_FROM_EMAIL=votre.email@gmail.com
+
+# Personnalisation des messages
+BANK_NAME=PAYGUARD
+OTP_EMAIL_SUBJECT=PAYGUARD - Votre code de connexion
+OTP_EMAIL_BODY=Bonjour {username},\n\nVotre code de connexion est: {code}.\nIl expire dans {expires_minutes} minutes.\n\n{app_name}
+WELCOME_EMAIL_SUBJECT=Bienvenue sur PAYGUARD
+WELCOME_EMAIL_BODY=Bonjour {username},\n\nVotre compte a été créé.\nIdentifiant: {username}\nMot de passe initial: {password}\n\nMerci d'utiliser {app_name}.
+
+# Démo: OTP fixe (désactiver en prod)
+DEFAULT_OTP_CODE=123456
 ```
+3) Redémarre le serveur.
 
 ## Structure du projet (extrait)
 ```
