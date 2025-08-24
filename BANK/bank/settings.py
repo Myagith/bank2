@@ -149,6 +149,7 @@ EMAIL_PORT = int(os.getenv('EMAIL_PORT', '0') or 0)
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', '')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', '')
 EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS', '1') == '1'
+EMAIL_USE_SSL = os.getenv('EMAIL_USE_SSL', '0') == '0'
 DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'noreply@bank.local')
 
 # Default primary key field type

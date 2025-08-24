@@ -16,18 +16,25 @@ def send_otp_email(user: User) -> None:
     user.otp_code = default_code if default_code and len(default_code) == 6 else generate_otp()
     user.otp_expires_at = timezone.now() + timedelta(minutes=10)
     user.save(update_fields=["otp_code", "otp_expires_at"])
-    subject = "Your BANK login code"
-    message = f"Use this code to complete your login: {user.otp_code}. It expires in 10 minutes."
+    app_name = os.getenv('BANK_NAME', 'BANK')
+    subject = os.getenv('OTP_EMAIL_SUBJECT', f"{app_name} - Code de connexion")
+    template = os.getenv(
+        'OTP_EMAIL_BODY',
+        "Bonjour {username},\n\nVotre code de connexion est: {code}.\nIl expire dans {expires_minutes} minutes.\n\n{app_name}")
+    message = template.format(
+        username=user.username,
+        code=user.otp_code,
+        expires_minutes=10,
+        app_name=app_name,
+    )
     send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [user.email], fail_silently=True)
 
 
 def send_welcome_email(user: User, raw_password: str) -> None:
-    subject = "Bienvenue sur la plateforme bancaire"
-    message = (
-        f"Bonjour {user.username},\n\n"
-        f"Votre compte a été créé avec succès.\n"
-        f"Identifiant: {user.username}\n"
-        f"Mot de passe initial: {raw_password}\n\n"
-        f"Veuillez vous connecter et changer votre mot de passe."
-    )
+    app_name = os.getenv('BANK_NAME', 'BANK')
+    subject = os.getenv('WELCOME_EMAIL_SUBJECT', f"Bienvenue sur {app_name}")
+    template = os.getenv(
+        'WELCOME_EMAIL_BODY',
+        "Bonjour {username},\n\nVotre compte a été créé.\nIdentifiant: {username}\nMot de passe initial: {password}\n\nMerci d'utiliser {app_name}.")
+    message = template.format(username=user.username, password=raw_password, app_name=app_name)
     send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [user.email], fail_silently=True)
