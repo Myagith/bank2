@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="profile">
+      <div class="avatar">JD</div>
+      <div class="name">JOHN DON</div>
+      <div class="email">johndon@company.com</div>
+    </div>
+    <nav class="nav">
+      <a class="nav-item active" href="#">home</a>
+      <a class="nav-item" href="#">file</a>
+      <a class="nav-item" href="#">messages</a>
+      <a class="nav-item" href="#">notification</a>
+      <a class="nav-item" href="#">location</a>
+      <a class="nav-item" href="#">graph</a>
+    </nav>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <h1>Dashboard User</h1>
+      <button class="menu-btn" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </header>
+
+    <section class="cards">
+      <div class="card">
+        <div class="card-title">Earning</div>
+        <div class="card-value">$ 628</div>
+      </div>
+      <div class="card">
+        <div class="card-title">Share</div>
+        <div class="card-value">2434</div>
+      </div>
+      <div class="card">
+        <div class="card-title">Likes</div>
+        <div class="card-value">1259</div>
+      </div>
+      <div class="card">
+        <div class="card-title">Rating</div>
+        <div class="card-value">8,5</div>
+      </div>
+    </section>
+
+    <section class="panel grid-2">
+      <div class="panel-box">
+        <div class="panel-header">
+          <div class="panel-title">Result</div>
+          <button class="btn small">Check Now</button>
+        </div>
+        <canvas id="barChart" height="120"></canvas>
+      </div>
+      <div class="panel-box donut">
+        <canvas id="donutChart" height="220"></canvas>
+        <ul class="legend">
+          <li>Lorem ipsum</li>
+          <li>Dolor amet</li>
+          <li>Sit amet</li>
+        </ul>
+        <button class="btn small alt">Check Now</button>
+      </div>
+    </section>
+
+    <section class="panel grid-2">
+      <div class="panel-box">
+        <canvas id="areaChart" height="140"></canvas>
+      </div>
+      <div class="panel-box calendar">
+        <div id="calendar"></div>
+      </div>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="./script.js"></script>
+</body>
+</html>
