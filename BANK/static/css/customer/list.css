@@ -1,0 +1,13 @@
+:root { --orange:#ff8800; --green:#32cd32; --bg:#ffffff; --bg-light:#f5fff5; --border:#e6e6e6; }
+
+h2 { color: var(--orange); margin-bottom: 16px; }
+
+.filters { background: var(--bg-light); padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid var(--border); }
+.filters input, .filters select { width: 220px; padding: 8px 10px; margin-right: 10px; border-radius: 6px; border: 1px solid var(--border); }
+.btn-primary { background: var(--orange); color: #fff; padding: 8px 12px; border: none; border-radius: 6px; cursor: pointer; }
+.btn-primary:hover { background: var(--green); }
+
+.table { width: 100%; border-collapse: collapse; background: var(--bg); box-shadow: 0 2px 5px rgba(0,0,0,0.08); }
+.table thead th { background: var(--orange); color: #fff; padding: 10px; text-align: left; }
+.table td { padding: 10px; border-bottom: 1px solid var(--border); }
+.table tr:nth-child(even) td { background: #fafafa; }

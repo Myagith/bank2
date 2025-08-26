@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="/static/css/theme.css">
     <link rel="stylesheet" href="/static/css/layout.css">
     <link rel="stylesheet" href="/static/css/components.css">
+    {% block extra_css %}{% endblock %}
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
@@ -20,6 +21,7 @@
         <a href="/transactions/history/">Transactions</a>
         <a href="/users/logout/" class="btn-logout">Logout</a>
     </nav>
+
 </header>
 <main class="container">
     {% for message in messages %}
@@ -29,5 +31,6 @@
 </main>
 <footer class="footer">© BANK</footer>
 <script src="/static/js/forms.js"></script>
+{% block extra_js %}{% endblock %}
 </body>
 </html>

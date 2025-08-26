@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Liste des clients{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/customer/list.css' %}">
+{% endblock %}
+
+{% block content %}
+<h2>Liste des clients</h2>
+
+<form method="get" class="filters" novalidate>
+  <input type="text" name="name" value="{{ request.GET.name }}" placeholder="Nom">
+  <input type="text" name="email" value="{{ request.GET.email }}" placeholder="Email">
+  <input type="text" name="client_no" value="{{ request.GET.client_no }}" placeholder="Numéro client">
+  <select name="bank">
+    <option value="">Toutes les banques</option>
+    {% for b in filter.form.fields.bank.queryset %}
+    <option value="{{ b.id }}" {% if request.GET.bank == b.id|stringformat:'s' %}selected{% endif %}>{{ b.name }}</option>
+    {% endfor %}
+  </select>
+  <button type="submit" class="btn-primary">Filtrer</button>
+</form>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Nom</th>
+      <th>Email</th>
+      <th>Numéro client</th>
+      <th>Banque</th>
+      <th>Créé le</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for c in customers %}
+    <tr>
+      <td>{{ c.id }}</td>
+      <td>{{ c.name }}</td>
+      <td>{{ c.email }}</td>
+      <td>{{ c.client_no }}</td>
+      <td>{{ c.bank.name }}</td>
+      <td>{{ c.created_at|date:"d/m/Y" }}</td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="6">Aucun client</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
+
+{% block extra_js %}{% endblock %}
