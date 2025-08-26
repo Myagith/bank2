@@ -1,0 +1,18 @@
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+.card { background-color: #ffffff; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); border: 1px solid #f2f2f2; }
+.card h3 { margin: 0 0 12px 0; color: #18212f; }
+.metric { font-size: 1.6rem; font-weight: 700; color: #18212f; }
+.table { width: 100%; border-collapse: collapse; }
+.table th, .table td { padding: 10px 12px; border-bottom: 1px solid #e9ecef; text-align: left; }
+
+/* Palette */
+:root { --orange: #ff8800; --green: #32cd32; --green-light: #9bef9b; }
+
+/* Charts sizing */
+canvas { width: 100% !important; max-height: 360px; }
+
+/* Accents always visible */
+.card h3::after { content: ""; display: block; width: 40px; height: 3px; background: var(--orange); margin-top: 6px; border-radius: 2px; }
+
+/* Buttons, badges if any */
+.badge { background: var(--green-light); color: #0f5132; padding: 2px 8px; border-radius: 999px; font-size: 12px; }
