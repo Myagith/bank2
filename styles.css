@@ -105,3 +105,38 @@ body {
 @media (max-width: 520px) {
   .cards { grid-template-columns: 1fr; }
 }
+
+/* Compat: règles fournies par l'utilisateur (adaptées au thème) */
+.card {
+    background-color: var(--panel);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+h3 {
+    margin-bottom: 15px;
+}
+
+canvas {
+    width: 100% !important;
+    max-height: 400px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+/* Petites améliorations pour l'intégration */
+.transactions thead th { color: var(--muted); font-size: 13px; font-weight: 600; }
+.transactions tbody tr:hover { background: rgba(255,138,0,0.06); }
+.legend { list-style: none; padding: 0; margin-top: 8px; color: var(--muted); }
+.legend li { position: relative; padding-left: 16px; }
+.legend li::before { content: ''; position: absolute; left: 0; top: 8px; width: 8px; height: 8px; border-radius: 50%; background: var(--brand-orange); }
