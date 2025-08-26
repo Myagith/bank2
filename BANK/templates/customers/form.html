@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Créer un client{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/customer/create.css' %}">
+{% endblock %}
+
+{% block content %}
+<h2>Créer un client</h2>
+
+{% if form.non_field_errors %}
+  <div class="form-alert">{{ form.non_field_errors }}</div>
+{% endif %}
+
+<form method="post" novalidate class="form-grid">
+  {% csrf_token %}
+  {% for field in form %}
+    <div class="form-field{% if field.errors %} has-error{% endif %}">
+      <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+      {{ field.as_widget(attrs={'required': 'required'}) }}
+      {% if field.help_text %}<small class="help">{{ field.help_text }}</small>{% endif %}
+      {% for error in field.errors %}
+        <div class="error">{{ error }}</div>
+      {% endfor %}
+    </div>
+  {% endfor %}
+  <div class="form-actions">
+    <button type="submit" class="btn-primary">Enregistrer</button>
+  </div>
+</form>
+{% endblock %}
+
+{% block extra_js %}{% endblock %}
